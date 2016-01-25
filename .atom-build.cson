@@ -1,0 +1,7 @@
+  "cmd": "make"
+  "args": [ ]
+  "sh": true
+  "cwd": "/home/bruce/Git/GameFoo"
+  "errorMatch": [
+    "^(?<filename>(?:[A-Z]:)?[^:]+):(?<line>[0-9]+).(?<column>[0-9]+)[^:]+: (?<message>.+)"
+  ]

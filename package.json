@@ -1,0 +1,19 @@
+{
+  "name": "gamefoo",
+  "version": "0.0.1",
+  "description": "Demo Vala Game",
+  "main": "index.js",
+  "scripts": {
+    "run": "make run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkoverlordofdata/game-foo.git"
+  },
+  "author": "darkoverlordofdata",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darkoverlordofdata/game-foo/issues"
+  },
+  "homepage": "https://github.com/darkoverlordofdata/game-foo#readme"
+}
