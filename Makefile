@@ -5,6 +5,7 @@ VC=valac
 
 # vala flags
 # -g debug
+# -w
 FLAGS=-g
 
 #
@@ -13,6 +14,7 @@ FLAGS=-g
 #
 LIBS=--pkg glib-2.0 \
 		--pkg gobject-2.0 \
+		--pkg gee-1.0 \
 		--pkg sdl2 \
 		--pkg SDL2_gfx \
 		--pkg SDL2_image \
@@ -21,8 +23,24 @@ LIBS=--pkg glib-2.0 \
 #
 # source code for this project
 #
-SOURCES=src/Bosco.Texture.vala \
-			src/Bosco.AbstractGame.vala \
+SOURCES=src/DarkMatter.vala \
+			src/Utils/UUID.vala \
+			src/Bosco/ECS/Exception.vala \
+			src/Bosco/Events/EntityReleased.vala \
+			src/Bosco/Events/ComponentReplaced.vala \
+			src/Bosco/Events/EntityChanged.vala \
+			src/Bosco/Events/WorldChanged.vala \
+			src/Bosco/Events/GroupChanged.vala \
+			src/Bosco/Interfaces/IComponent.vala \
+			src/Bosco/Interfaces/ISystem.vala \
+			src/Bosco/Interfaces/IMatcher.vala \
+			src/Bosco/ECS/Entity.vala \
+			src/Bosco/ECS/Group.vala \
+			src/Bosco/ECS/Matcher.vala \
+			src/Bosco/ECS/Types.vala \
+			src/Bosco/ECS/World.vala \
+			src/Bosco/Texture.vala \
+			src/Bosco/AbstractGame.vala \
 			src/App.vala
 
 #
@@ -34,7 +52,8 @@ CLIBS=-X -lm \
 #
 # c flags needed for the gcc compiler
 #
-CFLAGS=-X -I/usr/include/SDL
+CFLAGS=-X -w \
+			-X -I/usr/include/SDL
 
 #
 # Folder for finished binaries
