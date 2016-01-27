@@ -54,7 +54,7 @@ namespace Utils {
        int hex12 = d3 >> 8 & 0xff;
        int hex13 = d3 >> 16 & 0xff;
        int hex14 = d3 >> 24 & 0xff;
-       int hex15 = 0;
+       //int hex15 = 0;
 
        var sb = new StringBuilder();
 

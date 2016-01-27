@@ -79,6 +79,9 @@ default: $(BIN)/$(NAME)
 $(BIN)/$(NAME): $(SOURCES) $(APP)
 	-mkdir -p $(BIN)
 	cp -R --force $(RESOURCES) $(BIN)
+	rm -rf src/*.c
+	rm -rf src/**/*.c
+	rm -rf src/**/**/*.c
 	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(APP) -o $(BIN)/$(NAME)
 
 
@@ -86,9 +89,6 @@ run: $(BIN)/$(NAME)
 	$(BIN)/$(NAME)
 
 clean:
-	rm -rf src/*.c
-	rm -rf src/**/*.c
-	rm -rf src/**/**/*.c
 	rm -rf $(BIN)/*.o
 
 test: test/$(BIN)/$(NAME)
