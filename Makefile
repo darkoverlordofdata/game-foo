@@ -20,6 +20,10 @@ LIBS=--pkg glib-2.0 \
 		--pkg SDL2_image \
 		--pkg SDL2_ttf
 
+TEST=test/src/main.vala \
+		test/src/VUnit.vala \
+		test/src/TestExample.vala
+APP=src/App.vala
 #
 # source code for this project
 #
@@ -37,11 +41,10 @@ SOURCES=src/DarkMatter.vala \
 			src/Bosco/ECS/Entity.vala \
 			src/Bosco/ECS/Group.vala \
 			src/Bosco/ECS/Matcher.vala \
-			src/Bosco/ECS/Types.vala \
 			src/Bosco/ECS/World.vala \
 			src/Bosco/Texture.vala \
-			src/Bosco/AbstractGame.vala \
-			src/App.vala
+			src/Bosco/AbstractGame.vala
+
 
 #
 # c libs needed for the gcc compiler
@@ -73,17 +76,28 @@ RESOURCES=resources
 
 
 default: $(BIN)/$(NAME)
-$(BIN)/$(NAME): $(SOURCES)
+$(BIN)/$(NAME): $(SOURCES) $(APP)
 	-mkdir -p $(BIN)
 	cp -R --force $(RESOURCES) $(BIN)
-	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) -o $(BIN)/$(NAME)
+	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(APP) -o $(BIN)/$(NAME)
 
 
 run: $(BIN)/$(NAME)
 	$(BIN)/$(NAME)
 
 clean:
+	rm -rf src/*.c
+	rm -rf src/**/*.c
+	rm -rf src/**/**/*.c
 	rm -rf $(BIN)/*.o
+
+test: test/$(BIN)/$(NAME)
+test/$(BIN)/$(NAME): $(TEST)
+	-mkdir -p test/$(BIN)
+	cp -R --force $(RESOURCES) test/$(BIN)
+	$(VC) $(FLAGS) --disable-warnings $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TEST) -o test/$(BIN)/$(NAME)
+	test/$(BIN)/$(NAME)
+	rm --force test/$(BIN)/$(NAME)
 
 # install:
 # 	cp -f bin/webkat /usr/local/bin

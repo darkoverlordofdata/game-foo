@@ -1,3 +1,3 @@
-public class DarkMatter {
+public class DarkMatter : Object {
 
 }

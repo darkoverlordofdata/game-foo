@@ -4,7 +4,8 @@
   "description": "Demo Vala Game",
   "main": "index.js",
   "scripts": {
-    "run": "make run"
+    "run": "make run",
+    "test": "make test"
   },
   "repository": {
     "type": "git",
