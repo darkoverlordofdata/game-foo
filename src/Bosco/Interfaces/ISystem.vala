@@ -3,15 +3,15 @@ namespace Bosco.ECS {
 
     }
 
-    public interface ISetWorld  {
+    public interface ISetWorld : Object  {
       public abstract void setWorld(World world);
     }
 
-    public interface IExecuteSystem  {
+    public interface IExecuteSystem : Object  {
       public abstract void execute();
     }
 
-    public interface IInitializeSystem  {
+    public interface IInitializeSystem : Object  {
       public abstract void initialize();
     }
 

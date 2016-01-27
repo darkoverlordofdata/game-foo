@@ -1,6 +1,6 @@
 namespace Bosco.ECS {
 
-  public class Entity : DarkMatter {
+  public class Entity : Object {
 
     /**
      * @static

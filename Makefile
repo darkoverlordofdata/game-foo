@@ -27,14 +27,15 @@ APP=src/App.vala
 #
 # source code for this project
 #
-SOURCES=src/DarkMatter.vala \
-			src/Utils/UUID.vala \
+SOURCES=src/Utils/UUID.vala \
 			src/Bosco/ECS/Exception.vala \
 			src/Bosco/Events/EntityReleased.vala \
 			src/Bosco/Events/ComponentReplaced.vala \
 			src/Bosco/Events/EntityChanged.vala \
 			src/Bosco/Events/WorldChanged.vala \
+			src/Bosco/Events/GroupsChanged.vala \
 			src/Bosco/Events/GroupChanged.vala \
+			src/Bosco/Events/GroupUpdated.vala \
 			src/Bosco/Interfaces/IComponent.vala \
 			src/Bosco/Interfaces/ISystem.vala \
 			src/Bosco/Interfaces/IMatcher.vala \

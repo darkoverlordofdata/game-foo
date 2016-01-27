@@ -2,7 +2,7 @@ using Gee;
 using Utils;
 
 namespace Bosco.ECS {
-  public class World : DarkMatter {
+  public class World : Object {
 
     /**
      * The total number of components in this pool
@@ -46,7 +46,7 @@ namespace Bosco.ECS {
     /**
      * Subscribe to Group Created Event
      * @type {entitas.utils.ISignal} */
-    public GroupChanged onGroupCreated;
+    public GroupsChanged onGroupCreated;
 
     /**
      * Entity name for debugging
@@ -81,6 +81,8 @@ namespace Bosco.ECS {
     public OnComponentReplaced _cachedUpdateGroupsComponentReplaced;
     public OnEntityReleased _cachedOnEntityReleased;
 
+    private IInitializeSystem[] _initializeSystems;
+    private IExecuteSystem[] _executeSystems;
     /**
      * @constructor
      * @param {Object} components
@@ -89,7 +91,7 @@ namespace Bosco.ECS {
      */
     public World(EnumClass components, int totalComponents, int startCreationIndex=0) {
       World.instance = this;
-      onGroupCreated = new GroupChanged();
+      onGroupCreated = new GroupsChanged();
       onEntityCreated = new WorldChanged();
       onEntityDestroyed = new WorldChanged();
       onEntityWillBeDestroyed = new WorldChanged();
@@ -104,6 +106,8 @@ namespace Bosco.ECS {
       _cachedUpdateGroupsComponentAddedOrRemoved = updateGroupsComponentAddedOrRemoved;
       _cachedUpdateGroupsComponentReplaced = updateGroupsComponentReplaced;
       _cachedOnEntityReleased = onEntityReleased;
+      _initializeSystems = {};
+      _executeSystems = {};
       World.componentsEnum = components;
       World.totalComponents = totalComponents;
 
@@ -195,28 +199,42 @@ namespace Bosco.ECS {
       }
     }
     /**
-     * Create System
+     * add System
      * @param {entitas.ISystem|Function}
      * @returns {entitas.ISystem}
      */
-    public ISystem createSystem(ISystem system) {
-      /*var poolSystem = as(system, 'setPool');
-      if (poolSystem != null) {
-        poolSystem.setPool(pool);
-      }*/
-
-      /*var reactiveSystem = as(system, 'trigger');
-      if (reactiveSystem != null) {
-        return new ReactiveSystem(this, reactiveSystem);
+    public World add(ISystem system) {
+      if (system is ISetWorld) {
+        ((ISetWorld)system).setWorld(this);
       }
-      var multiReactiveSystem = as(system, 'triggers');
-      if (multiReactiveSystem != null) {
-        return new ReactiveSystem(this, multiReactiveSystem);
-      }*/
 
-      return system;
+      if (system is IInitializeSystem) {
+        _initializeSystems += (IInitializeSystem)system;
+      }
+
+      if (system is IExecuteSystem) {
+        _executeSystems += (IExecuteSystem)system;
+      }
+      return this;
     }
 
+    /**
+     * Initialize Systems
+     */
+    public void initialize() {
+      for (var i = 0; i<_initializeSystems.length;i++) {
+        _initializeSystems[i].initialize();
+      }
+    }
+
+    /**
+     * Execute sustems
+     */
+    public void execute() {
+      for (var i = 0; i<_executeSystems.length; i++) {
+        _executeSystems[i].execute();
+      }
+    }
     /**
      * Gets all of the entities that match
      *
