@@ -1,21 +1,23 @@
 using Utils;
 using Bosco.ECS;
 
-class TestExample : Vunny {
+class TestExample : Bunny.Vunny {
 
   public TestExample() {
+
     describe("TestExample");
 
-    it("A) Match 1, 2, 4", () => {
+    it("Match 1, 2, 4", () => {
 
       Matcher m = (Matcher)Matcher.AllOf({1, 2, 4});
-      return should.eq(m.toString(), "AllOf(1, 2, 4)");
+      return should.eq("AllOf(1, 2, 4)", m.toString());
+
     });
 
-    it("B) Match 1, 2, 4", () => {
+    it("is a UUID", () => {
 
-      Matcher m = (Matcher)Matcher.AllOf({1, 2, 4});
-      return should.eq(m.toString(), "xAllOf(1, 2, 4)");
+      return should.re("\\w{6}-\\w{4}-\\w{4}-\\w{4}-\\w{12}", UUID.randomUUID());
+
     });
 
    }
