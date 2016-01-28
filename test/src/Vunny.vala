@@ -65,22 +65,24 @@ namespace Bunny {
     public void run() {
       pass = 0;
       fail = 0;
-      start();
-      bool test;
 
       stdout.printf("---------------------------------\n");
       stdout.printf("| bunny vunny test suite v0.0.1 |\n");
       stdout.printf("---------------------------------\n");
       stdout.printf("\n\t%s\n---------------------------------\n", name);
-      for (var i=0; i<tests.length; i++) {
-        (test = tests[i].func()) ? pass++ : fail ++;
-        if (test) {
-          stdout.printf("PASS  <> %s\n", tests[i].name);
+
+      start();
+      foreach (var test in tests) {
+        if (test.func()) {
+          pass++;
+          stdout.printf("PASS  <> %s\n", test.name);
         } else {
-          stdout.printf("FAIL  <> %s\n", tests[i].name);
+          fail++;
+          stdout.printf("FAIL  <> %s\n", test.name);
         }
       }
       end();
+
       stdout.printf("---------------------------------\n");
       stdout.printf("  <====> Pass: %d\n", pass);
       stdout.printf("  <====> Fail: %d\n\n", fail);

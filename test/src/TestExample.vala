@@ -16,7 +16,7 @@ class TestExample : Bunny.Vunny {
 
     it("is a UUID", () => {
 
-      return should.re("\\w{6}-\\w{4}-\\w{4}-\\w{4}-\\w{12}", UUID.randomUUID());
+      return should.re("""\w{6}-\w{4}-\w{4}-\w{4}-\w{12}""", UUID.randomUUID());
 
     });
 
