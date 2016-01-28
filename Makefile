@@ -20,9 +20,9 @@ LIBS=--pkg glib-2.0 \
 		--pkg SDL2_image \
 		--pkg SDL2_ttf
 
-TEST=test/src/main.vala \
-		test/src/VUnit.vala \
+TEST=test/src/Vunny.vala \
 		test/src/TestExample.vala
+
 APP=src/App.vala
 #
 # source code for this project
@@ -96,7 +96,7 @@ test: test/$(BIN)/$(NAME)
 test/$(BIN)/$(NAME): $(TEST)
 	-mkdir -p test/$(BIN)
 	cp -R --force $(RESOURCES) test/$(BIN)
-	$(VC) $(FLAGS) --disable-warnings $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TEST) -o test/$(BIN)/$(NAME)
+	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TEST) -o test/$(BIN)/$(NAME)
 	test/$(BIN)/$(NAME)
 	rm --force test/$(BIN)/$(NAME)
 

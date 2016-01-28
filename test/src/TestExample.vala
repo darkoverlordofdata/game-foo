@@ -1,22 +1,28 @@
-class TestExample : VUnit {
+using Utils;
+using Bosco.ECS;
+
+class TestExample : Vunny {
 
   public TestExample() {
-    // assign a name for this class
-    base("TestExample");
-    // add test methods
-    add_test("test_example", test_example);
+    describe("TestExample");
+
+    it("A) Match 1, 2, 4", () => {
+
+      Matcher m = (Matcher)Matcher.AllOf({1, 2, 4});
+      return should.eq(m.toString(), "AllOf(1, 2, 4)");
+    });
+
+    it("B) Match 1, 2, 4", () => {
+
+      Matcher m = (Matcher)Matcher.AllOf({1, 2, 4});
+      return should.eq(m.toString(), "xAllOf(1, 2, 4)");
+    });
+
    }
 
-   public override void set_up () {
-     // setup your test
+   public static int main(string[] args) {
+     new TestExample().run();
+     return 0;
    }
 
-   public void test_example() {
-     // add your expressions
-     // assert(expression);
-   }
-
-   public override void tear_down () {
-     // tear down your test
-   }
 }

@@ -215,7 +215,7 @@ namespace Bosco.ECS {
       private static void appendIndices(StringBuilder sb, string prefix, int[] indexArray) {
         string SEPERATOR = ", ";
         sb.append(prefix);
-        sb.append("()");
+        sb.append("(");
         var lastSeperator = indexArray.length - 1;
         for (var i = 0; i<indexArray.length; i++) {
           sb.append(indexArray[i].to_string());
