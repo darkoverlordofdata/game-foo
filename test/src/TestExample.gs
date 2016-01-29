@@ -7,15 +7,17 @@ init
 
 class TestExample : Bunny.Vunny
 
-
     init
         describe("TestExample")
-        test_case("Match 1 2 3", test1)
-        test_case("It's a UUID!", test2)
+        add("Match 1 2 3", test_match)
+        add("It's a UUID!", test_uuid)
 
-    def test1():bool
+    def test_match()
         m:Matcher = (Matcher)Matcher.AllOf({1, 2, 3})
-        return should.eq("AllOf(1, 2, 3)", m.toString())
+        expect(m.toString()).to.equal("AllOf(1, 2, 3)")
 
-    def test2():bool
-        return should.re("""\w{6}-\w{4}-\w{4}-\w{4}-\w{12}""", UUID.randomUUID())
+    def test_uuid()
+        expect(UUID.randomUUID()).to.match("""\w{6}-\w{4}-\w{4}-\w{4}-\w{12}""")
+
+    //def test_world()
+        w:World = new World()

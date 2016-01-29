@@ -6,7 +6,8 @@ VC=valac
 # vala flags
 # -g debug
 # -w
-FLAGS=-g
+FLAGS=
+DEBUG=-g --save-temps
 
 #
 # vala core libs
@@ -21,7 +22,7 @@ LIBS=--pkg glib-2.0 \
 		--pkg SDL2_ttf
 
 TEST=test/src/Vunny.vala \
-		test/src/TestExample.gs
+		test/src/TestExample.vala
 
 APP=src/App.vala
 #
@@ -80,9 +81,6 @@ default: $(BIN)/$(NAME)
 $(BIN)/$(NAME): $(SOURCES) $(APP)
 	-mkdir -p $(BIN)
 	cp -R --force $(RESOURCES) $(BIN)
-	rm -rf src/*.c
-	rm -rf src/**/*.c
-	rm -rf src/**/**/*.c
 	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(APP) -o $(BIN)/$(NAME)
 
 
@@ -91,6 +89,17 @@ run: $(BIN)/$(NAME)
 
 clean:
 	rm -rf $(BIN)/*.o
+
+debug: debug/$(BIN)/$(NAME)
+debug/$(BIN)/$(NAME): $(TEST)
+	-mkdir -p test/$(BIN)
+	cp -R --force $(RESOURCES) test/$(BIN)
+	$(VC) $(DEBUG) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TEST) -o test/$(BIN)/$(NAME)
+	env GTK_THEME=elementary:light nemiver test/$(BIN)/$(NAME)
+	rm --force test/$(BIN)/$(NAME)
+	rm -rf src/*.c
+	rm -rf src/**/*.c
+	rm -rf src/**/**/*.c
 
 test: test/$(BIN)/$(NAME)
 test/$(BIN)/$(NAME): $(TEST)
