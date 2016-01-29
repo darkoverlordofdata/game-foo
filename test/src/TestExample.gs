@@ -10,9 +10,8 @@ class TestExample : Bunny.Vunny
 
     init
         describe("TestExample")
-        do
-            test_case("Match 1 2 3", test1)
-            test_case("It's a UUID!", test2)
+        test_case("Match 1 2 3", test1)
+        test_case("It's a UUID!", test2)
 
     def test1():bool
         m:Matcher = (Matcher)Matcher.AllOf({1, 2, 3})
