@@ -21,7 +21,7 @@ LIBS=--pkg glib-2.0 \
 		--pkg SDL2_ttf
 
 TEST=test/src/Vunny.vala \
-		test/src/TestExample.vala
+		test/src/TestExample.gs
 
 APP=src/App.vala
 #

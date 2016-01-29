@@ -60,6 +60,10 @@ namespace Bunny {
     public void it(string name, DelegateTest func) {
       tests+= new Test(name, func);
     }
+    /** add a test */
+    public void test_case(string name, DelegateTest func) {
+      tests+= new Test(name, func);
+    }
 
     /** run all the tests */
     public void run() {
@@ -75,10 +79,10 @@ namespace Bunny {
       foreach (var test in tests) {
         if (test.func()) {
           pass++;
-          stdout.printf("PASS  <> %s\n", test.name);
+          stdout.printf("PASS <=> %s\n", test.name);
         } else {
           fail++;
-          stdout.printf("FAIL  <> %s\n", test.name);
+          stdout.printf("FAIL <=> %s\n", test.name);
         }
       }
       end();
