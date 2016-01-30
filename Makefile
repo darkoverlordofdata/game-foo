@@ -21,8 +21,8 @@ LIBS=--pkg glib-2.0 \
 		--pkg SDL2_image \
 		--pkg SDL2_ttf
 
-TEST=test/src/Vunny.vala \
-		test/src/TestExample.vala
+TST=test/src/Vunny.gs \
+		test/src/TestExample.gs
 
 APP=src/App.vala
 #
@@ -83,6 +83,14 @@ $(BIN)/$(NAME): $(SOURCES) $(APP)
 	cp -R --force $(RESOURCES) $(BIN)
 	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(APP) -o $(BIN)/$(NAME)
 
+test: test/$(BIN)/$(NAME)
+test/$(BIN)/$(NAME): $(SOURCES) $(TST)
+	-mkdir -p test/$(BIN)
+	cp -R --force $(RESOURCES) test/$(BIN)
+	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TST) -o test/$(BIN)/$(NAME)
+	test/$(BIN)/$(NAME)
+	rm --force test/$(BIN)/$(NAME)
+
 
 run: $(BIN)/$(NAME)
 	$(BIN)/$(NAME)
@@ -91,23 +99,15 @@ clean:
 	rm -rf $(BIN)/*.o
 
 debug: debug/$(BIN)/$(NAME)
-debug/$(BIN)/$(NAME): $(TEST)
+debug/$(BIN)/$(NAME): $(TST)
 	-mkdir -p test/$(BIN)
 	cp -R --force $(RESOURCES) test/$(BIN)
-	$(VC) $(DEBUG) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TEST) -o test/$(BIN)/$(NAME)
+	$(VC) $(DEBUG) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TST) -o test/$(BIN)/$(NAME)
 	env GTK_THEME=elementary:light nemiver test/$(BIN)/$(NAME)
 	rm --force test/$(BIN)/$(NAME)
 	rm -rf src/*.c
 	rm -rf src/**/*.c
 	rm -rf src/**/**/*.c
-
-test: test/$(BIN)/$(NAME)
-test/$(BIN)/$(NAME): $(TEST)
-	-mkdir -p test/$(BIN)
-	cp -R --force $(RESOURCES) test/$(BIN)
-	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TEST) -o test/$(BIN)/$(NAME)
-	test/$(BIN)/$(NAME)
-	rm --force test/$(BIN)/$(NAME)
 
 # install:
 # 	cp -f bin/webkat /usr/local/bin

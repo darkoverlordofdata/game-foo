@@ -60,7 +60,7 @@ namespace Bosco.ECS {
     public string _toStringCache = "";
     public int _refCount = 0;
     private World _world;
-    private unowned EnumClass _componentsEnum;
+    private unowned string[] _componentsEnum;
 
     /**
      * The basic game object. Everything is an entity with components that
@@ -70,7 +70,7 @@ namespace Bosco.ECS {
      * @param {number} totalComponents
      * @constructor
      */
-    public Entity(EnumClass componentsEnum, int totalComponents=16) {
+    public Entity(string[] componentsEnum, int totalComponents=16) {
       onEntityReleased = new EntityReleased();
       onComponentAdded = new EntityChanged();
       onComponentRemoved = new EntityChanged();

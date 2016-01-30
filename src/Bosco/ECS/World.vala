@@ -56,7 +56,7 @@ namespace Bosco.ECS {
     /**
      * An enum of valid component types
      * @type {Object<string,number>} */
-    public static unowned EnumClass componentsEnum;
+    public static string[] componentsEnum;
 
     /**
      * Count of components
@@ -73,7 +73,7 @@ namespace Bosco.ECS {
     public ArrayList<ArrayList<Group>>_groupsForIndex;
     public ArrayList<Entity> _reusableEntities;
     public HashMap<string, Entity> _retainedEntities;
-    public unowned EnumClass _componentsEnum;
+    public string[] _componentsEnum;
     public int _totalComponents = 0;
     public int _creationIndex = 0;
     public GenericArray<Entity> _entitiesCache;
@@ -89,7 +89,7 @@ namespace Bosco.ECS {
      * @param {number} totalComponents
      * @param {number} startCreationIndex
      */
-    public World(EnumClass components, int totalComponents, int startCreationIndex=0) {
+    public World(string[] components, int startCreationIndex=0) {
       World.instance = this;
       onGroupCreated = new GroupsChanged();
       onEntityCreated = new WorldChanged();
@@ -97,7 +97,7 @@ namespace Bosco.ECS {
       onEntityWillBeDestroyed = new WorldChanged();
 
       _componentsEnum = components;
-      _totalComponents = totalComponents;
+      _totalComponents = components.length;
       _creationIndex = startCreationIndex;
       _groupsForIndex = new ArrayList<ArrayList<Group>>();
       _reusableEntities = new ArrayList<Entity>();
@@ -109,7 +109,7 @@ namespace Bosco.ECS {
       _initializeSystems = {};
       _executeSystems = {};
       World.componentsEnum = components;
-      World.totalComponents = totalComponents;
+      World.totalComponents = _totalComponents;
 
     }
 
