@@ -19,10 +19,6 @@ class TestExample : Bunny.Vunny
 
         world = new World({"PositionComponent", "MovementComponent", "ImageComponent"})
 
-    /** Teardown */
-    final
-        return
-
     /** Test the Match object */
     def test_match()
         m:Matcher = (Matcher)Matcher.AllOf({1, 2, 3})
@@ -35,3 +31,7 @@ class TestExample : Bunny.Vunny
     /** Test World creation */
     def test_world()
         expect(world.componentsCount).to.equal(3)
+
+    /** Teardown */
+    final
+        world = null
