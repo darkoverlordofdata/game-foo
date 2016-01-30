@@ -127,7 +127,6 @@ namespace Bunny {
     public Expectation parent;
     public Should should;
     private bool invert = false;
-    //public bool test = false;
 
     public To(Expectation parent) {
       this.parent = parent;
