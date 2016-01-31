@@ -1,5 +1,5 @@
 namespace Bosco.ECS {
-    public interface IComponent : Object  {
+    public interface IComponent : DarkMatter  {
 
     }
 }

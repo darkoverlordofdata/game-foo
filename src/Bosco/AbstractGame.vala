@@ -1,7 +1,7 @@
 using SDL;
 
 namespace Bosco {
-    public class AbstractGame : Object {
+    public class AbstractGame : DarkMatter {
 
         protected Window window;
         protected Renderer renderer;

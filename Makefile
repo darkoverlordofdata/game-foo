@@ -22,13 +22,17 @@ LIBS=--pkg glib-2.0 \
 			--pkg SDL2_ttf
 
 TST=test/src/Vunny.gs \
-		test/src/TestExample.gs
+		test/src/Should.gs \
+		test/src/Test.gs \
+		test/src/To.gs \
+		test/TestExample.gs
 
 APP=src/App.vala
 #
 # source code for this project
 #
-SOURCES=src/Utils/UUID.vala \
+SOURCES=src/DarkMatter.vala \
+			src/Utils/UUID.vala \
 			src/Bosco/ECS/Exception.vala \
 			src/Bosco/Events/EntityReleased.vala \
 			src/Bosco/Events/ComponentReplaced.vala \
@@ -99,7 +103,7 @@ clean:
 	rm -rf $(BIN)/*.o
 
 debug: debug/$(BIN)/$(NAME)
-debug/$(BIN)/$(NAME): $(TST)
+debug/$(BIN)/$(NAME): $(SOURCES) $(TST)
 	-mkdir -p test/$(BIN)
 	cp -R --force $(RESOURCES) test/$(BIN)
 	$(VC) $(DEBUG) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TST) -o test/$(BIN)/$(NAME)

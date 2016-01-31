@@ -1,5 +1,5 @@
 namespace Bosco.ECS {
-  public class Group : Object {
+  public class Group : DarkMatter {
 
     /**
      * Subscribe to Entity Addded events

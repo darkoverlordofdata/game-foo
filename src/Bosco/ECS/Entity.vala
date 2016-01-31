@@ -1,6 +1,6 @@
 namespace Bosco.ECS {
 
-  public class Entity : Object {
+  public class Entity : DarkMatter {
 
     /**
      * @static
@@ -295,7 +295,7 @@ namespace Bosco.ECS {
         var components = getComponents();
         var lastSeperator = components.length - 1 ;
         for (var i = 0, componentsLength = components.length; i < componentsLength; i++) {
-          sb.append(components[i].get_type().name().replace("Component", ""));
+          //sb.append(components[i].get_type().name().replace("Component", ""));
           if (i < lastSeperator) {
             sb.append(seperator);
           }

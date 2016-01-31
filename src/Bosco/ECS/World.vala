@@ -2,7 +2,7 @@ using Gee;
 using Utils;
 
 namespace Bosco.ECS {
-  public class World : Object {
+  public class World : DarkMatter {
 
     /**
      * The total number of components in this pool
@@ -77,9 +77,10 @@ namespace Bosco.ECS {
     public int _totalComponents = 0;
     public int _creationIndex = 0;
     public GenericArray<Entity> _entitiesCache;
-    public OnEntityChanged _cachedUpdateGroupsComponentAddedOrRemoved;
+    /*public OnEntityChanged _cachedUpdateGroupsComponentAddedOrRemoved;
     public OnComponentReplaced _cachedUpdateGroupsComponentReplaced;
-    public OnEntityReleased _cachedOnEntityReleased;
+    public OnEntityReleased _cachedOnEntityReleased;*/
+    public UUID uuid;
 
     private IInitializeSystem[] _initializeSystems;
     private IExecuteSystem[] _executeSystems;
@@ -104,14 +105,14 @@ namespace Bosco.ECS {
       _retainedEntities = new HashMap<string, Entity>();
       _entitiesCache = new GenericArray<Entity>();
       _entities = new HashMap<string, Entity>();
-      _cachedUpdateGroupsComponentAddedOrRemoved = updateGroupsComponentAddedOrRemoved;
+      /*_cachedUpdateGroupsComponentAddedOrRemoved = updateGroupsComponentAddedOrRemoved;
       _cachedUpdateGroupsComponentReplaced = updateGroupsComponentReplaced;
-      _cachedOnEntityReleased = onEntityReleased;
+      _cachedOnEntityReleased = onEntityReleased;*/
       _initializeSystems = {};
       _executeSystems = {};
       World.componentsEnum = components;
       World.totalComponents = _totalComponents;
-
+      uuid = new UUID();
     }
 
     /**
@@ -124,14 +125,14 @@ namespace Bosco.ECS {
       entity._isEnabled = true;
       entity.name = name;
       entity._creationIndex = _creationIndex++;
-      entity.id = UUID.randomUUID();
+      entity.id = uuid.randomUUID();
       entity.addRef();
       _entities[entity.id] = entity;
       _entitiesCache = new GenericArray<Entity>();
-      entity.onComponentAdded.add(_cachedUpdateGroupsComponentAddedOrRemoved);
-      entity.onComponentRemoved.add(_cachedUpdateGroupsComponentAddedOrRemoved);
-      entity.onComponentReplaced.add(_cachedUpdateGroupsComponentReplaced);
-      entity.onEntityReleased.add(_cachedOnEntityReleased);
+      entity.onComponentAdded.add(updateGroupsComponentAddedOrRemoved);
+      entity.onComponentRemoved.add(updateGroupsComponentAddedOrRemoved);
+      entity.onComponentReplaced.add(updateGroupsComponentReplaced);
+      entity.onEntityReleased.add(onEntityReleased);
 
       onEntityCreated.dispatch(this, entity);
       return entity;
@@ -153,7 +154,7 @@ namespace Bosco.ECS {
       onEntityDestroyed.dispatch(this, entity);
 
       if (entity._refCount == 1) {
-        entity.onEntityReleased.remove(_cachedOnEntityReleased);
+        entity.onEntityReleased.remove(onEntityReleased);
         _reusableEntities.add(entity);
       } else {
         _retainedEntities[entity.id] = entity;
@@ -274,12 +275,13 @@ namespace Bosco.ECS {
      * @param {entitas.IComponent} component
      */
     protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) {
-      var groups = _groupsForIndex[index];
+      /*stdout.printf("World::updateGroupsComponentAddedOrRemoved %d:%d\n", index, _groupsForIndex.size);*/
+      /*var groups = _groupsForIndex[index];
       if (groups != null) {
         for (var i = 0, groupsCount = groups.size; i < groupsCount; i++) {
-          //groups[i].handleEntity(entity, index, component);
+          groups[i].handleEntity(entity, index, component);
         }
-      }
+      }*/
     }
 
     /**
@@ -305,11 +307,10 @@ namespace Bosco.ECS {
         /*throw new Exception.EntityIsNotDestroyedException("Cannot release entity.");*/
         return;
       }
-      entity.onEntityReleased.remove(_cachedOnEntityReleased);
+      entity.onEntityReleased.remove(onEntityReleased);
       _retainedEntities.unset(entity.id);
       _reusableEntities.add(entity);
     }
-
 
   }
 }

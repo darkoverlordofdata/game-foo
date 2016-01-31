@@ -11,7 +11,7 @@ namespace Bosco.ECS {
       OnEntityAddedOrRemoved
     }
 
-    public class Matcher : Object, IMatcher, IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
+    public class Matcher : DarkMatter, IMatcher, IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
       /**
        * Get the matcher id
