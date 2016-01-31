@@ -14,12 +14,12 @@ DEBUG=-g --save-temps
 # reference the vala libs at /usr/share/vala/vapi
 #
 LIBS=--pkg glib-2.0 \
-		--pkg gobject-2.0 \
-		--pkg gee-1.0 \
-		--pkg sdl2 \
-		--pkg SDL2_gfx \
-		--pkg SDL2_image \
-		--pkg SDL2_ttf
+			--pkg gobject-2.0 \
+			--pkg gee-1.0 \
+			--pkg sdl2 \
+			--pkg SDL2_gfx \
+			--pkg SDL2_image \
+			--pkg SDL2_ttf
 
 TST=test/src/Vunny.gs \
 		test/src/TestExample.gs

@@ -10,25 +10,47 @@
  *       \_/ \_,_|_||_|_||_\_, |
  *                         |__/
  *
+ *
+ *        (\_/)
+ *        ('.')
+ *       (     )
+ *
+ *
  * Simple Testing Framework for Vala/Genie
  *    by Dark Overlord of Data
+ *
+ *
+ *
  *
  *    Copyright 2016 Bruce Davidson
  */
 [indent=4]
+const __bunny__:string = """
+  bunny vunny test suite v0.0.1
+
+          (\_/)
+          ('.')
+         (     )
+
+    It's no ordinary rabbit
+
+"""
+
 namespace Bunny
 
     /** @type Signature of Test function */
-    delegate DelegateTest():bool
-    delegate DelegateExpect()
+    delegate DelegateTest()
+    delegate DelegateFunc():bool
 
 
     /** @class Test - name & func of each test */
     class Test: Object
         construct(name:string, func:DelegateTest)
-            this.name = name
-            this.func = func
+            self.name = name
+            self.func = func
+            self.result = false
         name: string
+        result: bool
         func: unowned DelegateTest
 
     /**
@@ -36,8 +58,6 @@ namespace Bunny
      * inspired by Chai
      */
     class abstract Vunny : Object
-        result: static bool
-        func: static unowned DelegateExpect
         passed:int=0
         failed:int=0
         name:string = ""
@@ -48,49 +68,33 @@ namespace Bunny
             should = new Should()
 
         def describe(name:string)
-            this.name = name
-
-        def start()
-            return
-
-        def end()
-            return
-
-        def it(name:string, func:DelegateTest)
-            tests.add(new Test(name, func))
+            self.name = name
 
         def expect(actual:Value):Expectation
             return new Expectation(actual)
 
+        def test(name:string, func:DelegateTest)
+            tests.add(new Test(name, func))
 
-        def _func():bool
-            Vunny.func()
-            return Vunny.result
-
-
-        def test(name:string, func:DelegateExpect)
-            Vunny.func = func
-            tests.add(new Test(name, _func))
+        /*def it(name:string, func:DelegateFunc) {
+            tests.add(new Test(name, func))*/
 
         def run()
+
             passed = 0
             failed = 0
 
-            stdout.puts("\033[36m")
-            stdout.printf("---------------------------------\n")
-            stdout.printf("| bunny vunny test suite v0.0.1 |\n")
-            stdout.printf("---------------------------------\n")
-            stdout.printf("\n\t%s\n---------------------------------\n", name)
+            stdout.puts(__bunny__)
 
-            start()
+            stdout.printf("\n\t%s\n---------------------------------\n", name)
             for test in tests
-                if test.func()
+                test.func()
+                if Expectation.result
                     passed++
                     stdout.printf("PASS <=> %s\n", test.name)
                 else
                     failed++
                     stdout.printf("FAIL <=> %s\n", test.name)
-            end()
             stdout.printf("---------------------------------\n")
             stdout.printf("    <====> Pass: %d\n", passed)
             stdout.printf("    <====> Fail: %d\n\n\033[0m", failed)
@@ -98,45 +102,46 @@ namespace Bunny
     class Expectation
         actual:Value
         to:To
+        result:static bool
         construct(actual:Value)
-            this.actual = actual
-            to = new To(this)
+            self.actual = actual
+            to = new To(self)
 
     class To
         parent: Expectation
         should: Should
         invert: bool = false
         construct(parent:Expectation)
-            this.parent = parent
+            self.parent = parent
             should = new Should()
 
         def @not():To
             invert = true
-            return this
+            return self
 
         def equal(expected:Value)
             var test = should.eq(parent.actual, expected)
-            Vunny.result = invert ? !test : test
+            Expectation.result = invert ? !test : test
 
         def gt(expected:Value)
             var test = should.gt(parent.actual.get_string(), expected.get_string())
-            Vunny.result = invert ? !test : test
+            Expectation.result = invert ? !test : test
 
         def ge(expected:Value)
             var test = should.ge(parent.actual, expected)
-            Vunny.result = invert ? !test : test
+            Expectation.result = invert ? !test : test
 
         def lt(expected:Value)
             var test = should.lt(parent.actual, expected)
-            Vunny.result = invert ? !test : test
+            Expectation.result = invert ? !test : test
 
         def le(expected:Value)
             var test = should.le(parent.actual, expected)
-            Vunny.result = invert ? !test : test
+            Expectation.result = invert ? !test : test
 
         def match(expected:Value)
             var test = should.match(parent.actual.get_string(), expected.get_string())
-            Vunny.result = invert ? !test : test
+            Expectation.result = invert ? !test : test
 
     class Should
         def match(actual:string, expected:string):bool

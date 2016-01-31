@@ -103,6 +103,7 @@ namespace Bosco.ECS {
       _reusableEntities = new ArrayList<Entity>();
       _retainedEntities = new HashMap<string, Entity>();
       _entitiesCache = new GenericArray<Entity>();
+      _entities = new HashMap<string, Entity>();
       _cachedUpdateGroupsComponentAddedOrRemoved = updateGroupsComponentAddedOrRemoved;
       _cachedUpdateGroupsComponentReplaced = updateGroupsComponentReplaced;
       _cachedOnEntityReleased = onEntityReleased;
@@ -126,7 +127,7 @@ namespace Bosco.ECS {
       entity.id = UUID.randomUUID();
       entity.addRef();
       _entities[entity.id] = entity;
-      _entitiesCache.remove_range(0, _entitiesCache.length);
+      _entitiesCache = new GenericArray<Entity>();
       entity.onComponentAdded.add(_cachedUpdateGroupsComponentAddedOrRemoved);
       entity.onComponentRemoved.add(_cachedUpdateGroupsComponentAddedOrRemoved);
       entity.onComponentReplaced.add(_cachedUpdateGroupsComponentReplaced);

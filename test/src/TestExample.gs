@@ -5,7 +5,6 @@ uses Bosco.ECS
 init
     new TestExample().run()
 
-
 class TestExample : Bunny.Vunny
 
     world:World
@@ -16,6 +15,7 @@ class TestExample : Bunny.Vunny
         test("Match 1 2 3", test_match)
         test("It's a UUID!", test_uuid)
         test("Hello World", test_world)
+        test("Make an entity", test_entity)
 
         world = new World({"PositionComponent", "MovementComponent", "ImageComponent"})
 
@@ -31,6 +31,10 @@ class TestExample : Bunny.Vunny
     /** Test World creation */
     def test_world()
         expect(world.componentsCount).to.equal(3)
+
+    def test_entity()
+        var entity = world.createEntity("fred");
+        expect(entity.name).to.equal("fred")
 
     /** Teardown */
     final
