@@ -77,9 +77,6 @@ namespace Bosco.ECS {
     public int _totalComponents = 0;
     public int _creationIndex = 0;
     public GenericArray<Entity> _entitiesCache;
-    /*public OnEntityChanged _cachedUpdateGroupsComponentAddedOrRemoved;
-    public OnComponentReplaced _cachedUpdateGroupsComponentReplaced;
-    public OnEntityReleased _cachedOnEntityReleased;*/
     public UUID uuid;
 
     private IInitializeSystem[] _initializeSystems;
@@ -105,9 +102,6 @@ namespace Bosco.ECS {
       _retainedEntities = new HashMap<string, Entity>();
       _entitiesCache = new GenericArray<Entity>();
       _entities = new HashMap<string, Entity>();
-      /*_cachedUpdateGroupsComponentAddedOrRemoved = updateGroupsComponentAddedOrRemoved;
-      _cachedUpdateGroupsComponentReplaced = updateGroupsComponentReplaced;
-      _cachedOnEntityReleased = onEntityReleased;*/
       _initializeSystems = {};
       _executeSystems = {};
       World.componentsEnum = components;

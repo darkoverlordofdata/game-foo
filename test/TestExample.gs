@@ -25,15 +25,29 @@ class MovementComponent  : DarkMatter implements  IComponent
 class ImageComponent  : DarkMatter implements IComponent
     path:string
 
-class MovementSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, IExecuteSystem
+class RenderingSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, IExecuteSystem
+    world:World
+
     def setWorld(world:World)
-        stdout.printf("setWorld\n")
+        this.world = world
 
     def execute()
-        stdout.printf("execute\n")
+        pass
 
     def initialize()
-        stdout.printf("initialize\n")
+        pass
+
+class MovementSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, IExecuteSystem
+    world:World
+
+    def setWorld(world:World)
+        this.world = world
+
+    def execute()
+        pass
+
+    def initialize()
+        pass
 
 
 
@@ -85,12 +99,10 @@ class TestExample : Bunny.Vunny
 
         try
             player.addComponent(Components.PositionComponent, pos)
+            expect(player.hasComponent(Components.PositionComponent)).to.equal(true)
 
         except e:Exception
             stdout.printf(e.message)
-
-        finally
-            expect(player.hasComponent(Components.PositionComponent)).to.equal(true)
 
 
 
