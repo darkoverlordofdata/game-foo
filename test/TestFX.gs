@@ -12,19 +12,19 @@ enum Components
     ResourceComponent
 
 [Compact]
-class PositionComponent  : DarkMatter implements IComponent
+class PositionComponent : DarkMatter implements IComponent
     x:double
     y:double
     z:double
 
 [Compact]
-class MovementComponent  : DarkMatter implements  IComponent
+class MovementComponent : DarkMatter implements  IComponent
     x:double
     y:double
     z:double
 
 [Compact]
-class ResourceComponent  : DarkMatter implements IComponent
+class ResourceComponent : DarkMatter implements IComponent
     path:string
 
 
@@ -43,9 +43,8 @@ class TestSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, 
             if e1 != null
                 print "entity name %s", e1.name
 
-            var es = group.getEntities()
-            for var i=0 to (es.length-1)
-                print "entity name %s", es[i].name
+            for var e in group.getEntities()
+                print "entity name %s", e.name
         except e:Error
             pass
 
@@ -110,10 +109,13 @@ class TestExample : Bunny.Vunny
             player.addComponent(Components.PositionComponent, pos)
             player.addComponent(Components.MovementComponent, mov)
             player.addComponent(Components.ResourceComponent, res)
-            expect(player.hasComponent(Components.MovementComponent)).to.equal(true)
 
         except e:Exception
             print e.message
+
+        finally
+            expect(player.hasComponent(Components.MovementComponent)).to.equal(true)
+
 
 
 

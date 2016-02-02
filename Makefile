@@ -41,13 +41,13 @@ DEMO=test/Game.gs \
 SOURCES=src/DarkMatter.vala \
 			src/Utils/UUID.vala \
 			src/Bosco/ECS/Exception.vala \
-			src/Bosco/Events/EntityReleased.vala \
-			src/Bosco/Events/ComponentReplaced.vala \
-			src/Bosco/Events/EntityChanged.vala \
-			src/Bosco/Events/WorldChanged.vala \
-			src/Bosco/Events/GroupsChanged.vala \
-			src/Bosco/Events/GroupChanged.vala \
-			src/Bosco/Events/GroupUpdated.vala \
+			src/Bosco/Events/EntityReleased.gs \
+			src/Bosco/Events/ComponentReplaced.gs \
+			src/Bosco/Events/EntityChanged.gs \
+			src/Bosco/Events/WorldChanged.gs \
+			src/Bosco/Events/GroupsChanged.gs \
+			src/Bosco/Events/GroupChanged.gs \
+			src/Bosco/Events/GroupUpdated.gs \
 			src/Bosco/Interfaces/IComponent.vala \
 			src/Bosco/Interfaces/ISystem.vala \
 			src/Bosco/Interfaces/IMatcher.vala \

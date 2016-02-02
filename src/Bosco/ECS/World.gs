@@ -1,9 +1,5 @@
 [indent=4]
 
-uses
-    Gee
-    Utils
-
 namespace Bosco.ECS
     class World : DarkMatter
 
@@ -81,7 +77,6 @@ namespace Bosco.ECS
 
         _entities : dict of string, Entity
         _groups : dict of string, Group
-
         _groupsForIndex : GenericArray of GenericArray of Group
         _reusableEntities : GLib.Queue of Entity
         _retainedEntities : dict of string, Entity
@@ -89,7 +84,7 @@ namespace Bosco.ECS
         _totalComponents : int = 0
         _creationIndex : int = 0
         _entitiesCache : array of Entity
-        _uuid : UUID
+        _uuid : Utils.UUID
 
         _initializeSystems : array of IInitializeSystem
         _executeSystems : array of IExecuteSystem
@@ -120,7 +115,7 @@ namespace Bosco.ECS
             _executeSystems = new array of IExecuteSystem[0]
             World.componentsEnum = components
             World.totalComponents = _totalComponents
-            _uuid = new UUID()
+            _uuid = new Utils.UUID()
 
 
         /**
@@ -254,13 +249,13 @@ namespace Bosco.ECS
                 _groups[matcher.id] = group
 
                 for var index in matcher.indices
-                    ag : GenericArray of Group
+                    gag : GenericArray of Group
                     if _groupsForIndex.length < index
-                        _groupsForIndex.add(ag = new GenericArray of Group)
+                        _groupsForIndex.add(gag = new GenericArray of Group)
                      else
-                        ag = _groupsForIndex[index]
+                        gag = _groupsForIndex[index]
 
-                    ag.add(group)
+                    gag.add(group)
                 _onGroupCreated.dispatch(this, group)
             return group
 
