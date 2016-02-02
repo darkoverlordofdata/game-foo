@@ -6,10 +6,6 @@ namespace Bosco.ECS {
      * @static
      * @type {number} */
     public static int instanceIndex = 0;
-    /**
-     * @static
-     * @type {Array<Array<IComponent>>} */
-    public static IComponent [,] alloc;
 
     /**
      * @static
@@ -141,16 +137,14 @@ namespace Bosco.ECS {
     }
 
     protected void _replaceComponent(int index, IComponent? replacement) {
-      var components = _components;
-      var previousComponent = components[index];
+      var previousComponent = _components[index];
       if (previousComponent == replacement) {
         onComponentReplaced.dispatch(this, index, previousComponent, replacement);
       } else {
-        components[index] = replacement;
+        _components[index] = replacement;
         _componentsCache = null;
         if (replacement == null) {
-          //delete components[index];
-          components[index] = null;
+          _components[index] = null;
           _componentIndicesCache = null;
           _toStringCache = null;
           onComponentRemoved.dispatch(this, index, previousComponent);
@@ -184,8 +178,7 @@ namespace Bosco.ECS {
     public IComponent[] getComponents() {
       if (_componentsCache == null) {
         IComponent[] components = {};
-        var _components = _components;
-        for (var i = 0, componentsLength = _components.length; i < componentsLength; i++) {
+        for (var i = 0;i < _components.length; i++) {
           var component = _components[i];
           if (component != null) {
             components+= component;
@@ -204,8 +197,7 @@ namespace Bosco.ECS {
     public int[] getComponentIndices() {
       if (_componentIndicesCache == null) {
         int[] indices = {};
-        var _components = _components;
-        for (var i = 0, componentsLength = _components.length; i < componentsLength; i++) {
+        for (var i = 0; i < _components.length; i++) {
           if (_components[i] != null) {
             indices+= i;
           }
@@ -232,8 +224,7 @@ namespace Bosco.ECS {
      * @returns {boolean}
      */
     public bool hasComponents(int[] indices) {
-      var _components = _components;
-      for (var i = 0, indicesLength = indices.length; i < indicesLength; i++) {
+      for (var i = 0; i < indices.length; i++) {
         if (_components[indices[i]] == null) {
           return false;
         }
@@ -248,8 +239,7 @@ namespace Bosco.ECS {
      * @returns {boolean}
      */
     public bool hasAnyComponent(int[] indices) {
-      var _components = _components;
-      for (var i = 0, indicesLength = indices.length; i < indicesLength; i++) {
+      for (var i = 0; i < indices.length; i++) {
         if (_components[indices[i]] != null) {
           return true;
         }
@@ -263,8 +253,7 @@ namespace Bosco.ECS {
      */
     public void removeAllComponents() {
       _toStringCache = "";
-      var _components = _components;
-      for (var i = 0, componentsLength = _components.length; i < componentsLength; i++) {
+      for (var i = 0; i < _components.length; i++) {
         if (_components[i] != null) {
           _replaceComponent(i, null);
         }
@@ -295,7 +284,7 @@ namespace Bosco.ECS {
         var components = getComponents();
         var lastSeperator = components.length - 1 ;
         for (var i = 0, componentsLength = components.length; i < componentsLength; i++) {
-          //sb.append(components[i].get_type().name().replace("Component", ""));
+          sb.append(_componentsEnum[i].replace("Component", ""));
           if (i < lastSeperator) {
             sb.append(seperator);
           }

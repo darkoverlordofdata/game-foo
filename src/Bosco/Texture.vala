@@ -1,4 +1,5 @@
 namespace Bosco {
+
     public class Texture : DarkMatter {
         private SDL.Texture texture;
         public int width {get; private set;}

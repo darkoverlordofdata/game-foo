@@ -1,6 +1,8 @@
 using Bosco;
 
-public class App : AbstractGame {
+delegate void MyDelegate();
+
+public class Game : AbstractGame {
 
     private const int WALKING_ANIMATION_FRAMES = 4;
     private const int SCREEN_WIDTH = 640;
@@ -12,7 +14,7 @@ public class App : AbstractGame {
     private Texture spriteSheetTexture;
     private Texture backgroundTexture;
 
-    App() {
+    Game() {
         name = "GameFoo";
         width = SCREEN_WIDTH;
         height = SCREEN_HEIGHT;
@@ -111,9 +113,10 @@ public class App : AbstractGame {
 
 
     public static int main(){
-        stdout.printf("Application started\n");
-        var app = new App();
-        return app.OnExecute();
+
+        var game = new Game();
+        game.OnExecute();
+        return 0;
     }
 
 

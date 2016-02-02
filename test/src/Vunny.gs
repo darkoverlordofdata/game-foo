@@ -71,28 +71,28 @@ namespace Bunny
             passed = 0
             failed = 0
 
-            stdout.puts(__bunny__)
-            stdout.printf("\n\t%s\n---------------------------------\n", name)
+            print __bunny__
+            print "\t%s\n---------------------------------", name
             for test in tests
                 if test.hasReturn
                   if test.func()
                       passed++
-                      stdout.printf("PASS <=> %s\n", test.name)
+                      print "PASS <=> %s", test.name
                   else
                       failed++
-                      stdout.printf("FAIL <=> %s\n", test.name)
+                      print "FAIL <=> %s", test.name
                 else
                   test.proc()
                   if Expectation.result
                       passed++
-                      stdout.printf("PASS <=> %s\n", test.name)
+                      print "PASS <=> %s", test.name
                   else
                       failed++
-                      stdout.printf("FAIL <=> %s\n", test.name)
+                      print "FAIL <=> %s", test.name
 
-            stdout.printf("---------------------------------\n")
-            stdout.printf("    <====> Pass: %d\n", passed)
-            stdout.printf("    <====> Fail: %d\n\n\033[0m", failed)
+            print "---------------------------------"
+            print "    <====> Pass: %d", passed
+            print "    <====> Fail: %d\n\n\033[0m", failed
 
     class Expectation
         actual:Value

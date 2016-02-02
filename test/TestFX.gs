@@ -9,59 +9,57 @@ init
 enum Components
     PositionComponent
     MovementComponent
-    ImageComponent
+    ResourceComponent
 
-
+[Compact]
 class PositionComponent  : DarkMatter implements IComponent
     x:double
     y:double
     z:double
 
+[Compact]
 class MovementComponent  : DarkMatter implements  IComponent
     x:double
     y:double
     z:double
 
-class ImageComponent  : DarkMatter implements IComponent
+[Compact]
+class ResourceComponent  : DarkMatter implements IComponent
     path:string
 
-class RenderingSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, IExecuteSystem
-    world:World
+
+class TestSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, IExecuteSystem
+    group:Group
 
     def setWorld(world:World)
-        this.world = world
+        group = world.getGroup(Matcher.AllOf({Components.ResourceComponent}))
 
     def execute()
         pass
 
     def initialize()
-        pass
+        try
+            var e1 = group.getSingleEntity()
+            if e1 != null
+                print "entity name %s", e1.name
 
-class MovementSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, IExecuteSystem
-    world:World
-
-    def setWorld(world:World)
-        this.world = world
-
-    def execute()
-        pass
-
-    def initialize()
-        pass
-
-
-
+            var es = group.getEntities()
+            for var i=0 to (es.length-1)
+                print "entity name %s", es[i].name
+        except e:Error
+            pass
 
 class TestExample : Bunny.Vunny
 
-    components: array of string = {"PositionComponent", "MovementComponent", "ImageComponent"}
+    components: array of string = {"PositionComponent", "MovementComponent", "ResourceComponent"}
     world:World
     player:Entity
-    sys:MovementSystem
+    sys:TestSystem
 
     /** Initialize tests */
     construct()
         describe("TestExample")
+        test("Generic Array", test_array)
         test("Match 1 2 3", test_match)
         test("Create world", test_world)
         test("Make player entity", test_player)
@@ -78,6 +76,10 @@ class TestExample : Bunny.Vunny
     final
         world = null
 
+
+    def test_array()
+        fred:GenericArray of GenericArray of Group = new GenericArray of GenericArray of Group
+        expect(fred.length).to.equal(0)
 
     /** Test the Match object */
     def test_match()
@@ -97,17 +99,26 @@ class TestExample : Bunny.Vunny
         pos.x = 10
         pos.y = 20
 
+        var mov = new MovementComponent()
+        mov.x = 0
+        mov.y = 0
+
+        var res = new ResourceComponent()
+        res.path = "resources/background.png"
+
         try
             player.addComponent(Components.PositionComponent, pos)
-            expect(player.hasComponent(Components.PositionComponent)).to.equal(true)
+            player.addComponent(Components.MovementComponent, mov)
+            player.addComponent(Components.ResourceComponent, res)
+            expect(player.hasComponent(Components.MovementComponent)).to.equal(true)
 
         except e:Exception
-            stdout.printf(e.message)
+            print e.message
 
 
 
     def test_system()
-        sys = new MovementSystem()
+        sys = new TestSystem()
         world.add(sys)
 
     def test_initialize()

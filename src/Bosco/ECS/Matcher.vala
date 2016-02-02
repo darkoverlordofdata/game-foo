@@ -195,7 +195,8 @@ namespace Bosco.ECS {
        * @params {Array<entitas.IMatcher>|Array<number>} args
        * @returns {entitas.Matcher}
        */
-      public static IAllOfMatcher AllOf(int[] args) {
+       /*public static IAllOfMatcher AllOf(int[] args) {*/
+      public static IMatcher AllOf(int[] args) {
         var matcher = new Matcher();
         matcher._allOfIndices = Matcher.distinctIndices(args);
         return matcher;
@@ -206,7 +207,8 @@ namespace Bosco.ECS {
        * @params {Array<entitas.IMatcher>|Array<number>} args
        * @returns {entitas.Matcher}
        */
-      public static IAnyOfMatcher AnyOf(int[] args) {
+       /*public static IAnyOfMatcher AnyOf(int[] args) {*/
+      public static IMatcher AnyOf(int[] args) {
         var matcher = new Matcher();
         matcher._anyOfIndices = Matcher.distinctIndices(args);
         return matcher;

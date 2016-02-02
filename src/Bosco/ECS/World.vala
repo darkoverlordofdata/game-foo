@@ -20,7 +20,7 @@ namespace Bosco.ECS {
      * Count of entities waiting to be recycled
      * @type {number}
      * @name entitas.Pool#reusableEntitiesCount */
-    public int reusableEntitiesCount {get { return _reusableEntities.size; }}
+    public int reusableEntitiesCount {get { return (int)_reusableEntities.length; }}
 
     /**
      * Count of entities that sill have references
@@ -70,8 +70,9 @@ namespace Bosco.ECS {
 
     public HashMap<string, Entity> _entities;
     public HashMap<string, Group> _groups;
-    public ArrayList<ArrayList<Group>>_groupsForIndex;
-    public ArrayList<Entity> _reusableEntities;
+    public GenericArray<Group>_testArray;
+    public GenericArray<GenericArray<Group>>_groupsForIndex;
+    public GLib.Queue<Entity> _reusableEntities;
     public HashMap<string, Entity> _retainedEntities;
     public string[] _componentsEnum;
     public int _totalComponents = 0;
@@ -97,11 +98,14 @@ namespace Bosco.ECS {
       _componentsEnum = components;
       _totalComponents = components.length;
       _creationIndex = startCreationIndex;
-      _groupsForIndex = new ArrayList<ArrayList<Group>>();
-      _reusableEntities = new ArrayList<Entity>();
+      _groupsForIndex = new GenericArray<GenericArray<Group>>();
+
+      _testArray = new GenericArray<Group>();
+      _reusableEntities = new GLib.Queue<Entity>();
       _retainedEntities = new HashMap<string, Entity>();
       _entitiesCache = new GenericArray<Entity>();
       _entities = new HashMap<string, Entity>();
+      _groups = new HashMap<string, Group>();
       _initializeSystems = {};
       _executeSystems = {};
       World.componentsEnum = components;
@@ -115,12 +119,8 @@ namespace Bosco.ECS {
      * @returns {entitas.Entity}
      */
     public Entity createEntity(string name) {
-      var entity = _reusableEntities.size > 0 ? _reusableEntities.remove_at(_reusableEntities.size-1) : new Entity(_componentsEnum, _totalComponents);
-      entity._isEnabled = true;
-      entity.name = name;
-      entity._creationIndex = _creationIndex++;
-      entity.id = uuid.randomUUID();
-      entity.addRef();
+      var entity = _reusableEntities.length > 0 ? _reusableEntities.pop_head() : new Entity(_componentsEnum, _totalComponents);
+      entity.initialize(name, uuid.randomUUID(), _creationIndex++);
       _entities[entity.id] = entity;
       _entitiesCache = new GenericArray<Entity>();
       entity.onComponentAdded.add(updateGroupsComponentAddedOrRemoved);
@@ -147,9 +147,9 @@ namespace Bosco.ECS {
 
       onEntityDestroyed.dispatch(this, entity);
 
-      if (entity._refCount == 1) {
+      if (entity.refCount == 1) {
         entity.onEntityReleased.remove(onEntityReleased);
-        _reusableEntities.add(entity);
+        _reusableEntities.push_head(entity);
       } else {
         _retainedEntities[entity.id] = entity;
       }
@@ -161,7 +161,7 @@ namespace Bosco.ECS {
      */
     public void destroyAllEntities() throws Exception {
       var entities = getEntities();
-      for (var i = 0, entitiesLength = entities.length; i < entitiesLength; i++) {
+      for (var i = 0; i < entities.length; i++) {
         destroyEntity(entities[i]);
       }
     }
@@ -200,6 +200,7 @@ namespace Bosco.ECS {
      * @returns {entitas.ISystem}
      */
     public World add(ISystem system) {
+      stdout.printf("In World\n");
       if (system is ISetWorld) {
         ((ISetWorld)system).setWorld(this);
       }
@@ -246,17 +247,24 @@ namespace Bosco.ECS {
         group = new Group(matcher);
 
         var entities = getEntities();
-        for (var i = 0, entitiesLength = entities.length; i < entitiesLength; i++) {
-          //group.handleEntitySilently(entities[i]);
+        try {
+          for (var i = 0; i < entities.length; i++) {
+            group.handleEntitySilently(entities[i]);
+          }
+        } catch (Error e) {
+          assert(false);
         }
         _groups[matcher.id] = group;
 
-        for (var i = 0, indicesLength = matcher.indices.length; i < indicesLength; i++) {
+        for (var i = 0; i < matcher.indices.length; i++) {
           var index = matcher.indices[i];
-          if (_groupsForIndex[index] == null) {
-            _groupsForIndex[index] = new Gee.ArrayList<Group>();
+          GenericArray<Group> ag;
+          if (_groupsForIndex.length < index) {
+            _groupsForIndex.add(ag = new GenericArray<Group>());
+          } else {
+            ag = _groupsForIndex[index];
           }
-          _groupsForIndex[index].add(group);
+          ag.add(group);
         }
         onGroupCreated.dispatch(this, group);
       }
@@ -269,13 +277,19 @@ namespace Bosco.ECS {
      * @param {entitas.IComponent} component
      */
     protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) {
-      /*stdout.printf("World::updateGroupsComponentAddedOrRemoved %d:%d\n", index, _groupsForIndex.size);*/
-      /*var groups = _groupsForIndex[index];
-      if (groups != null) {
-        for (var i = 0, groupsCount = groups.size; i < groupsCount; i++) {
-          groups[i].handleEntity(entity, index, component);
+      if (index+1 <= _groupsForIndex.length) {
+        var groups = _groupsForIndex[index];
+        if (groups != null) {
+          try {
+            for (var i = 0; i < groups.length; i++) {
+              groups[i].handleEntity(entity, index, component);
+            }
+          }
+          catch (Error e) {
+            assert(false);
+          }
         }
-      }*/
+      }
     }
 
     /**
@@ -285,10 +299,12 @@ namespace Bosco.ECS {
      * @param {entitas.IComponent} newComponent
      */
     protected void updateGroupsComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
-      var groups = _groupsForIndex[index];
-      if (groups != null) {
-        for (var i = 0, groupsCount = groups.size; i < groupsCount; i++) {
-          //groups[i].updateEntity(entity, index, previousComponent, newComponent);
+      if (index+1 <= _groupsForIndex.length) {
+        var groups = _groupsForIndex[index];
+        if (groups != null) {
+          for (var i = 0; i < groups.length; i++) {
+            groups[i].updateEntity(entity, index, previousComponent, newComponent);
+          }
         }
       }
     }
@@ -297,13 +313,13 @@ namespace Bosco.ECS {
      * @param {entitas.Entity} entity
      */
     protected void onEntityReleased(Entity entity) {
-      if (entity._isEnabled) {
+      if (entity.isEnabled) {
         /*throw new Exception.EntityIsNotDestroyedException("Cannot release entity.");*/
         return;
       }
       entity.onEntityReleased.remove(onEntityReleased);
       _retainedEntities.unset(entity.id);
-      _reusableEntities.add(entity);
+      _reusableEntities.push_head(entity);
     }
 
   }

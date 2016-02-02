@@ -25,9 +25,16 @@ TST=test/src/Vunny.gs \
 		test/src/Should.gs \
 		test/src/Test.gs \
 		test/src/To.gs \
-		test/TestExample.gs
+		test/TestFX.gs
 
-APP=src/App.vala
+APP=src/Game.vala
+
+DEMO=test/Game.gs \
+			test/Components.gs \
+			test/Entities.gs \
+			test/MovementSystem.gs \
+			test/RenderSystem.gs
+
 #
 # source code for this project
 #
@@ -44,10 +51,10 @@ SOURCES=src/DarkMatter.vala \
 			src/Bosco/Interfaces/IComponent.vala \
 			src/Bosco/Interfaces/ISystem.vala \
 			src/Bosco/Interfaces/IMatcher.vala \
-			src/Bosco/ECS/Entity.vala \
-			src/Bosco/ECS/Group.vala \
-			src/Bosco/ECS/Matcher.vala \
-			src/Bosco/ECS/World.vala \
+			src/Bosco/ECS/Entity.gs \
+			src/Bosco/ECS/Group.gs \
+			src/Bosco/ECS/Matcher.gs \
+			src/Bosco/ECS/World.gs \
 			src/Bosco/Texture.vala \
 			src/Bosco/AbstractGame.vala
 
@@ -95,6 +102,11 @@ test/$(BIN)/$(NAME): $(SOURCES) $(TST)
 	test/$(BIN)/$(NAME)
 	rm --force test/$(BIN)/$(NAME)
 
+demo: demo/$(BIN)/$(NAME)
+demo/$(BIN)/$(NAME): $(SOURCES) $(DEMO)
+	-mkdir -p demo/$(BIN)
+	cp -R --force $(RESOURCES) demo/$(BIN)
+	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(DEMO) -o demo/$(BIN)/$(NAME)
 
 run: $(BIN)/$(NAME)
 	$(BIN)/$(NAME)

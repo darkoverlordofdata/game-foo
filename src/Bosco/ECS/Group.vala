@@ -33,6 +33,7 @@ namespace Bosco.ECS {
     private string _toStringCache;
 
     public Group(IMatcher matcher) {
+      _entities = new Gee.HashMap<string,Entity>();
       _entitiesCache = new GenericArray<Entity>();
       onEntityAdded = new GroupChanged();
       onEntityRemoved = new GroupChanged();
@@ -158,9 +159,9 @@ namespace Bosco.ECS {
      */
     public GenericArray<Entity> getEntities() {
       if (_entitiesCache == null) {
-        var entitiesCache = new GenericArray<Entity>();
+        _entitiesCache = new GenericArray<Entity>();
         foreach (var e in _entities.values) {
-          entitiesCache.add(e);
+          _entitiesCache.add(e);
         }
       }
       return _entitiesCache;
