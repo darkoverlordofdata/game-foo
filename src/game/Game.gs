@@ -62,7 +62,7 @@ class Game : AbstractGame
         if super.OnInit()
             world = new World(components)
             world.add(new MovementSystem())
-            world.add(new RenderPositionSystem())
+            world.add(new RenderPositionSystem(renderer))
             world.add(new ViewManagerSystem(renderer))
             world.initialize()
 

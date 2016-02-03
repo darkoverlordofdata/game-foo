@@ -7,7 +7,7 @@ def createBackground():Entity
 
     var res = new ResourceComponent()
     res.path = "resources/background.png"
-    res.texture = null
+    res.image = null
 
     var pos = new PositionComponent()
     pos.x = 0

@@ -13,22 +13,19 @@ enum Components
 
 [Compact]
 class PositionComponent  : DarkMatter implements IComponent
-    x:double
-    y:double
-    z:double
+    x:int
+    y:int
 
 [Compact]
 class MovementComponent  : DarkMatter implements  IComponent
-    x:double
-    y:double
-    z:double
+    x:int
+    y:int
 
 [Compact]
 class ResourceComponent : DarkMatter implements IComponent
     path:string
-    texture:Texture
+    image:Image
 
 [Compact]
 class AnimationComponent  : DarkMatter implements IComponent
-    sprite:Texture
     frames:array of SDL.Rectangle

@@ -4,7 +4,7 @@ uses
     Bosco
     Bosco.ECS
 
-class ViewManagerSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, IExecuteSystem
+class ViewManagerSystem : DarkMatter implements ISystem, ISetWorld
 
     _renderer : unowned Renderer
     _group: Group
@@ -12,21 +12,13 @@ class ViewManagerSystem : DarkMatter implements ISystem, ISetWorld, IInitializeS
     construct(renderer : Renderer)
         _renderer = renderer
 
+    /**
+     * Listen for resources to be added
+     * and then load them in from the file
+     */
     def setWorld(world:World)
         _group = world.getGroup(Matcher.AllOf({Components.ResourceComponent}))
         _group.onEntityAdded.add(onEntityAdded)
-
-    def execute()
-        try
-            for entity in _group.getEntities()
-                var c = (ResourceComponent)entity.getComponent(Components.ResourceComponent)
-                c.texture.render(_renderer, 0, 0)
-
-        except e:Exception
-            print e.message
-
-    def initialize()
-        pass
 
     /**
      *  OnEntityAdded event:
@@ -34,7 +26,5 @@ class ViewManagerSystem : DarkMatter implements ISystem, ISetWorld, IInitializeS
     def onEntityAdded(g : Group, e : Entity, i : int, c : IComponent)
 
         var res = (ResourceComponent)c
-        res.texture = Bosco.Texture.fromFile(_renderer, res.path)
-
-        if res.texture == null
-            print "Failed to load %s", res.path
+        res.image = Image.fromFile(_renderer, res.path)
+        if res.image == null do print "Failed to load %s", res.path

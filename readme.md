@@ -1,8 +1,8 @@
-pa# GameFoo
+# GameFoo
 
 A simple game in Genie/Vala using assets from LazyFoo examples for SDL2
 
-
+A POC for an ecs game engine written in Vala/Genie
 
 
 

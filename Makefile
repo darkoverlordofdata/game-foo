@@ -55,8 +55,8 @@ SOURCES=src/DarkMatter.vala \
 			src/Bosco/ECS/Group.gs \
 			src/Bosco/ECS/Matcher.gs \
 			src/Bosco/ECS/World.gs \
-			src/Bosco/Texture.vala \
-			src/Bosco/AbstractGame.vala
+			src/Bosco/Image.gs \
+			src/Bosco/AbstractGame.gs
 
 
 #
