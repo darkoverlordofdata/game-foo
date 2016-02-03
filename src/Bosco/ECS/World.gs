@@ -1,6 +1,7 @@
 [indent=4]
 
 namespace Bosco.ECS
+
     class World : DarkMatter
 
         /**
@@ -77,8 +78,8 @@ namespace Bosco.ECS
 
         _entities : dict of string, Entity
         _groups : dict of string, Group
-        _groupsForIndex : GenericArray of GenericArray of Group
-        _reusableEntities : GLib.Queue of Entity
+        _groupsForIndex : array of Gee.ArrayList of Group
+        _reusableEntities : Queue of Entity
         _retainedEntities : dict of string, Entity
         _componentsEnum : array of string
         _totalComponents : int = 0
@@ -104,9 +105,9 @@ namespace Bosco.ECS
             _componentsEnum = components
             _totalComponents = components.length
             _creationIndex = startCreationIndex
-            _groupsForIndex = new GenericArray of GenericArray of Group
+            _groupsForIndex = new array of Gee.ArrayList of Group[components.length]
 
-            _reusableEntities = new GLib.Queue of Entity
+            _reusableEntities = new Queue of Entity
             _retainedEntities = new dict of string, Entity
             _entitiesCache = new array of Entity[0]
             _entities = new dict of string, Entity
@@ -235,7 +236,7 @@ namespace Bosco.ECS
 
             if _groups.has_key(matcher.id)
                 group = _groups[matcher.id]
-             else
+            else
                 group = new Group(matcher)
 
                 var entities = getEntities()
@@ -249,13 +250,9 @@ namespace Bosco.ECS
                 _groups[matcher.id] = group
 
                 for var index in matcher.indices
-                    gag : GenericArray of Group
-                    if _groupsForIndex.length < index
-                        _groupsForIndex.add(gag = new GenericArray of Group)
-                     else
-                        gag = _groupsForIndex[index]
-
-                    gag.add(group)
+                    if _groupsForIndex[index] == null
+                        _groupsForIndex[index] = new Gee.ArrayList of Group
+                    _groupsForIndex[index].add(group)
                 _onGroupCreated.dispatch(this, group)
             return group
 
@@ -270,8 +267,8 @@ namespace Bosco.ECS
                 var groups = _groupsForIndex[index]
                 if groups != null
                     try
-                        for var i=0 to (groups.length-1)
-                            groups[i].handleEntity(entity, index, component)
+                        for var group in groups
+                            group.handleEntity(entity, index, component)
 
                     except e : Error
                         assert(false)
@@ -286,8 +283,8 @@ namespace Bosco.ECS
             if index+1 <= _groupsForIndex.length
                 var groups = _groupsForIndex[index]
                 if groups != null
-                    for var i=0 to (groups.length-1)
-                        groups[i].updateEntity(entity, index, previousComponent, newComponent)
+                    for var group in groups
+                        group.updateEntity(entity, index, previousComponent, newComponent)
 
         /**
          * @param entitas.Entity entity

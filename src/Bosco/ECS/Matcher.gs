@@ -118,22 +118,34 @@ namespace Bosco.ECS
          */
         def toString() : string
             if _toStringCache == null
-                var sb = new StringBuilder()
+                var sb = new array of string[0]
                 if _allOfIndices != null
-                    Matcher.appendIndices(sb, "AllOf", _allOfIndices)
+                    sb += "AllOf("
+                    sb += componentsToString(_allOfIndices)
+                    sb += ")"
 
                 if _anyOfIndices != null
                     if _allOfIndices != null
-                        sb.append(".")
+                        sb += "."
 
-                    Matcher.appendIndices(sb, "AnyOf", _anyOfIndices)
+                    sb += "AnyOf("
+                    sb += componentsToString(_anyOfIndices)
+                    sb += ")"
 
                 if _noneOfIndices != null
-                    Matcher.appendIndices(sb, ".NoneOf", _noneOfIndices)
+                    sb += ".NoneOf("
+                    sb += componentsToString(_noneOfIndices)
+                    sb += ")"
 
-                _toStringCache = sb.str
+                _toStringCache = string.joinv("", sb)
 
             return _toStringCache
+
+        def static componentsToString(indexArray : array of int) : string
+            var sb = new array of string[0]
+            for var index in indexArray
+                sb += World.componentsEnum[index-1].replace("Component", "")
+            return string.joinv(",", sb)
 
         def static listToArray(l : list of int) : array of int
             var a = new array of int[l.size]
@@ -147,14 +159,14 @@ namespace Bosco.ECS
          * @returns Array<number>
          */
         def static distinctIndices(indices : array of int) : array of int
-            var indicesSet = new Gee.HashSet of int
+            var indicesSet = new dict of int, bool
             var result = new list of int
 
             for var index in indices
-                if !indicesSet.contains(index)
+                if !indicesSet.has_key(index)
                     result.add(index)
+                indicesSet[index] = true
 
-                indicesSet.add(index)
             return listToArray(result)
 
         /**
@@ -177,7 +189,6 @@ namespace Bosco.ECS
          * @params Array<entitas.IMatcher>|Array<number> args
          * @returns entitas.Matcher
          */
-         /*static IAllOfMatcher AllOf(int[] args) */
         def static AllOf(args : array of int) : IMatcher
             var matcher = new Matcher()
             matcher._allOfIndices = Matcher.distinctIndices(args)
@@ -188,20 +199,7 @@ namespace Bosco.ECS
          * @params Array<entitas.IMatcher>|Array<number> args
          * @returns entitas.Matcher
          */
-         /*static IAnyOfMatcher AnyOf(int[] args) */
         def static AnyOf(args : array of int) : IMatcher
             var matcher = new Matcher()
             matcher._anyOfIndices = Matcher.distinctIndices(args)
             return matcher
-
-        def static appendIndices(sb : StringBuilder, prefix : string, indexArray : array of int)
-            var SEPERATOR = ", "
-            sb.append(prefix)
-            sb.append("(")
-            var lastSeperator = indexArray.length - 1
-            for var i = 0 to lastSeperator
-                sb.append(indexArray[i].to_string())
-                if i < lastSeperator
-                    sb.append(SEPERATOR)
-
-            sb.append(")")

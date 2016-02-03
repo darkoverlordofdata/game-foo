@@ -33,6 +33,9 @@ namespace Bosco {
         public virtual void OnCleanup() {}
 
 
+        /**
+         * Initialize SDL
+         */
         public virtual bool OnInit() {
             if (SDL.init(SDL.InitFlag.VIDEO) < 0) {
                 stdout.printf("SDL could not initialize! SDL Error: %s\n", SDL.get_error());

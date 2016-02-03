@@ -27,13 +27,13 @@ TST=test/src/Vunny.gs \
 		test/src/To.gs \
 		test/TestFX.gs
 
-APP=src/Game.vala
+APP=src/game/Components.gs \
+		src/game/Entities.gs \
+		src/game/MovementSystem.gs \
+		src/game/RenderPositionSystem.gs \
+		src/game/ViewManagerSystem.gs \
+		src/game/Game.gs
 
-DEMO=test/Game.gs \
-			test/Components.gs \
-			test/Entities.gs \
-			test/MovementSystem.gs \
-			test/RenderSystem.gs
 
 #
 # source code for this project
@@ -101,12 +101,6 @@ test/$(BIN)/$(NAME): $(SOURCES) $(TST)
 	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(TST) -o test/$(BIN)/$(NAME)
 	test/$(BIN)/$(NAME)
 	rm --force test/$(BIN)/$(NAME)
-
-demo: demo/$(BIN)/$(NAME)
-demo/$(BIN)/$(NAME): $(SOURCES) $(DEMO)
-	-mkdir -p demo/$(BIN)
-	cp -R --force $(RESOURCES) demo/$(BIN)
-	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(DEMO) -o demo/$(BIN)/$(NAME)
 
 run: $(BIN)/$(NAME)
 	$(BIN)/$(NAME)

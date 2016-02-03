@@ -182,6 +182,10 @@ namespace Bosco.ECS
          * @returns string
          */
         def toString() : string
+            //componentsEnum
             if _toStringCache == null
-                _toStringCache = "Group(" + _matcher.toString() + ")"
+                var sb = new array of string[0]
+                for var index in _matcher.indices
+                    sb += World.componentsEnum[index].replace("Component", "")
+                _toStringCache = "Group(" + string.joinv(",", sb) + ")"
             return _toStringCache

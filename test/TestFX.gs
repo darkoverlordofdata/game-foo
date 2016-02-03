@@ -50,7 +50,11 @@ class TestSystem : DarkMatter implements ISystem, ISetWorld, IInitializeSystem, 
 
 class TestExample : Bunny.Vunny
 
-    components: array of string = {"PositionComponent", "MovementComponent", "ResourceComponent"}
+    components: array of string = {
+        "PositionComponent",
+        "MovementComponent",
+        "ResourceComponent"
+    }
     world:World
     player:Entity
     sys:TestSystem
@@ -83,7 +87,8 @@ class TestExample : Bunny.Vunny
     /** Test the Match object */
     def test_match()
         m:Matcher = (Matcher)Matcher.AllOf({1, 2, 3})
-        expect(m.toString()).to.equal("AllOf(1, 2, 3)")
+        print "|%s|", m.toString()
+        expect(m.toString()).to.equal("AllOf(Position,Movement,Resource)")
 
     /** Test World creation */
     def test_world()

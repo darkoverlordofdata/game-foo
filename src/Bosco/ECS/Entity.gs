@@ -81,13 +81,19 @@ namespace Bosco.ECS
             _world = World.instance
 
 
+        /**
+         * Initialize the entity after allocation from the pool
+         *
+         * @param string  name
+         * @param string  id
+         * @param int creationIndex
+         */
         def initialize(name : string, id : string, creationIndex : int)
             _name = name
             _creationIndex = creationIndex
             _isEnabled = true
             _id = id
             addRef()
-
 
          /**
           * AddComponent
@@ -111,7 +117,6 @@ namespace Bosco.ECS
             _onComponentAdded.dispatch(this, index, component)
             return this
 
-
         /**
          * RemoveComponent
          *
@@ -128,7 +133,6 @@ namespace Bosco.ECS
 
             _replaceComponent(index, null)
             return this
-
 
         /**
          * ReplaceComponent
