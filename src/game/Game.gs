@@ -2,6 +2,7 @@
 uses
     Bosco
     Bosco.ECS
+    SDL
 
 init
     print "Application started"
@@ -22,8 +23,8 @@ class Game : AbstractGame
     const WALKING_ANIMATION_FRAMES:int = 4
     const SCREEN_WIDTH:int = 640
     const SCREEN_HEIGHT:int = 480
-    frame:int = 0
-
+    frame : int = 0
+    showFps : bool = true
 
     construct()
         name = "GameFoo"
@@ -38,10 +39,6 @@ class Game : AbstractGame
      */
     def override OnLoop()
         pass
-        // frame++
-        // if frame / WALKING_ANIMATION_FRAMES >= WALKING_ANIMATION_FRAMES
-        //     frame = 0
-
     /**
      *  OnRender
      *
@@ -51,6 +48,7 @@ class Game : AbstractGame
         renderer.set_draw_color(0xFF, 0xFF, 0xFF, SDL.Alpha.OPAQUE)
         renderer.clear()
         world.execute()
+        if showFps do fpsTexture().render(renderer, 0, 0)
         renderer.present()
 
     /**
@@ -60,6 +58,7 @@ class Game : AbstractGame
      */
     def override OnInit():bool
         if super.OnInit()
+
             world = new World(components)
             world.add(new MovementSystem())
             world.add(new RenderPositionSystem(renderer))

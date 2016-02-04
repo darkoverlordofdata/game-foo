@@ -3,10 +3,14 @@ uses
     Bosco
 
 init
-    stdout.printf("Application started\n")
-    var game = new Game()
-    game.OnExecute()
-    print "hello"
+    try
+        print "Application started"
+        var game = new Game()
+        game.OnExecute()
+
+    except e:Error
+        print e.message
+
 
 class Game : AbstractGame
 

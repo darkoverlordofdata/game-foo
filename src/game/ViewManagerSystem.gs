@@ -4,20 +4,24 @@ uses
     Bosco
     Bosco.ECS
 
-class ViewManagerSystem : DarkMatter implements ISystem, ISetWorld
+class ViewManagerSystem : DarkMatter implements ISystem, IInitializeSystem, ISetWorld
 
     _renderer : unowned Renderer
     _group: Group
+    _world: World
 
     construct(renderer : Renderer)
         _renderer = renderer
+
+    def setWorld(world : World)
+        _world = world
 
     /**
      * Listen for resources to be added
      * and then load them in from the file
      */
-    def setWorld(world:World)
-        _group = world.getGroup(Matcher.AllOf({Components.ResourceComponent}))
+    def initialize()
+        _group = _world.getGroup(Matcher.AllOf({Components.ResourceComponent}))
         _group.onEntityAdded.add(onEntityAdded)
 
     /**
@@ -26,5 +30,6 @@ class ViewManagerSystem : DarkMatter implements ISystem, ISetWorld
     def onEntityAdded(g : Group, e : Entity, i : int, c : IComponent)
 
         var res = (ResourceComponent)c
-        res.image = Image.fromFile(_renderer, res.path)
-        if res.image == null do print "Failed to load %s", res.path
+        res.image = Bosco.Texture.fromFile(_renderer, res.path)
+        if res.image == null
+            print "Failed to load %s", res.path

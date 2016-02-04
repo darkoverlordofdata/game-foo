@@ -24,7 +24,7 @@ class MovementComponent  : DarkMatter implements  IComponent
 [Compact]
 class ResourceComponent : DarkMatter implements IComponent
     path:string
-    image:Image
+    image:Texture
 
 [Compact]
 class AnimationComponent  : DarkMatter implements IComponent

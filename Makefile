@@ -55,9 +55,14 @@ SOURCES=src/DarkMatter.vala \
 			src/Bosco/ECS/Group.gs \
 			src/Bosco/ECS/Matcher.gs \
 			src/Bosco/ECS/World.gs \
-			src/Bosco/Image.gs \
+			src/Bosco/Timer.gs \
+			src/Bosco/Texture.gs \
 			src/Bosco/AbstractGame.gs
 
+OLD=src/DarkMatter.vala \
+		old/Game.vala \
+		old/AbstractGame.vala \
+		old/Texture.vala
 
 #
 # c libs needed for the gcc compiler
@@ -87,12 +92,17 @@ NAME=gamefoo
 #
 RESOURCES=resources
 
-
 default: $(BIN)/$(NAME)
 $(BIN)/$(NAME): $(SOURCES) $(APP)
 	-mkdir -p $(BIN)
 	cp -R --force $(RESOURCES) $(BIN)
 	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(SOURCES) $(APP) -o $(BIN)/$(NAME)
+
+# default: $(BIN)/$(NAME)
+# $(BIN)/$(NAME): $(OLD)
+# 	-mkdir -p $(BIN)
+# 	cp -R --force $(RESOURCES) $(BIN)
+# 	$(VC) $(FLAGS) $(LIBS) $(CLIBS) $(CFLAGS) $(OLD) -o $(BIN)/$(NAME)
 
 test: test/$(BIN)/$(NAME)
 test/$(BIN)/$(NAME): $(SOURCES) $(TST)
